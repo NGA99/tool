@@ -1,2 +1,3 @@
-
-python3 class2java.py "target directory"
+```
+python3 jar2java.py "target directory"
+```
