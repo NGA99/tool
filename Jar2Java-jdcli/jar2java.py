@@ -1,10 +1,12 @@
 import os
+import sys
 import subprocess
 
 def jdCli(jarPath, savePath):
 
+    global jdCliPath
     print(jarPath)
-    subprocess.call(["jd-cli.bat", jarPath, "-od", savePath])
+    subprocess.call([jdCliPath, jarPath, "-od", savePath])
 
 def classToJava(dirName):
 
@@ -20,5 +22,6 @@ def classToJava(dirName):
 
 if __name__ == '__main__':
 
-    dirName = "C:/NGA/Study/CMS/Confluence8.0/"
+    jdCliPath = "./jd-cli.bat"
+    dirName = sys.argv[1]
     classToJava(dirName)
