@@ -16,12 +16,12 @@ def classToJava(dirName):
 
             if(file.endswith(".jar")):
 
-                jarPath = "{}/{}".format(root,file.replace("\\","//"))
-                savePath = "{}/{}".format(root,file.replace("\\","//")[:-4])
+                jarPath = os.path.join(root,file).replace("\\","/")
+                savePath = os.path.join(root,file).replace("\\","/")[:-4]
                 jdCli(jarPath, savePath)
 
 if __name__ == '__main__':
 
-    jdCliPath = "./jd-cli.bat"
+    jdCliPath = "jd-cli.bat"
     dirName = sys.argv[1]
     classToJava(dirName)
