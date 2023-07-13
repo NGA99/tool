@@ -2,26 +2,33 @@ import os
 import sys
 import subprocess
 
-def jdCli(jarPath, savePath):
+def toJava(sourcePath, destPath):
 
     global jdCliPath
-    print(jarPath)
-    subprocess.call([jdCliPath, jarPath, "-od", savePath])
+    print(sourcePath)
+    subprocess.call([jdCliPath, sourcePath, "-od", destPath])
 
-def classToJava(dirName):
+def decompile(targetPath):
 
-    for root, dirs, files in os.walk(dirName):
+    for root, dirs, files in os.walk(targetPath):
 
         for file in files:
 
             if(file.endswith(".jar")):
 
-                jarPath = os.path.join(root,file).replace("\\","/")
-                savePath = os.path.join(root,file).replace("\\","/")[:-4]
-                jdCli(jarPath, savePath)
+                sourcePath = os.path.join(root,file).replace("\\","/")
+                destPath = os.path.join(root,file).replace("\\","/")[:-4]
+                toJava(sourcePath, destPath)
+                decompile(destPath)
+
+            if(file.endswith(".class")):
+
+                sourcePath = os.path.join(root, file).replace("\\","/")
+                destPath = os.path.join(root).replace("\\","/")
+                toJava(sourcePath, destPath)
 
 if __name__ == '__main__':
 
     jdCliPath = "jd-cli.bat"
-    dirName = sys.argv[1]
-    classToJava(dirName)
+    targetPath = sys.argv[1]
+    decompile(targetPath)
