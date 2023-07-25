@@ -6,7 +6,16 @@ def toJava(sourcePath, destPath):
 
     global jdCliPath
     print(sourcePath)
-    subprocess.call([jdCliPath, sourcePath, "-od", destPath])
+    try:
+        proc = subprocess.Popen([jdCliPath, sourcePath, "-od", destPath], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc.communicate(timeout=30)
+    except subprocess.TimeoutExpired:
+
+        print("Timeout", sourcePath)
+        timeOutPath.append(sourcePath)
+        proc.kill()
+        return None
+
 
 def decompile(targetPath):
 
@@ -19,7 +28,7 @@ def decompile(targetPath):
                 sourcePath = os.path.join(root,file).replace("\\","/")
                 destPath = os.path.join(root,file).replace("\\","/")[:-4]
                 toJava(sourcePath, destPath)
-                decompile(destPath)
+                #decompile(destPath)
 
             if(file.endswith(".class")):
 
@@ -29,6 +38,8 @@ def decompile(targetPath):
 
 if __name__ == '__main__':
 
+    timeOutPath = []
     jdCliPath = "jd-cli.bat"
-    targetPath = sys.argv[1]
+    targetPath = "/"
     decompile(targetPath)
+    print(timeOutPath)
